@@ -10,15 +10,16 @@
                 <el-input prefix-icon="myicon myicon-user" v-model="form.username" placeholder="账户"></el-input>
             </el-form-item>
             <el-form-item prop="password">
-                <el-input prefix-icon="myicon myicon-key " v-model="form.password" placeholder="密码"></el-input>
+                <el-input prefix-icon="myicon myicon-key " v-model="form.password" placeholder="密码" type="password"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" class="login-btn">登陆</el-button>
+                <el-button type="primary" class="login-btn" @click="loginSubmit('form')">登陆</el-button>
             </el-form-item>
         </el-form>
     </div>
 </template>
 <script>
+import {checkUser} from '@/api'
 export default {
     data () {
         return {
@@ -36,6 +37,26 @@ export default {
                     // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                 ]
             }
+        }
+    },
+    methods: {
+        loginSubmit (formName) {
+            this.$refs[formName].validate(vali => {
+                if(vali) {
+                    checkUser(this.form).then(res => {
+                        if (res.meta.status === 200) {
+                            this.$router.push({name:'Home'})
+                        } else {
+                            this.$message({
+                                type:'error',
+                                message:res.meta.msg
+                            })
+                        }
+                    })
+                } else {
+                    console.log('gg')
+                }
+            })
         }
     }
 }

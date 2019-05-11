@@ -41,20 +41,25 @@ export default {
     },
     methods: {
         loginSubmit (formName) {
-            this.$refs[formName].validate(vali => {
-                if(vali) {
+            this.$refs[formName].validate(valide => {
+                // 只有校验通过，才执行函数
+                if (valide) {
                     checkUser(this.form).then(res => {
+                        // 如果成功要跳转至首页, 将token保存到localStorage, 将username保存到vuex的state中
                         if (res.meta.status === 200) {
-                            this.$router.push({name:'Home'})
+                            // console.log(res)
+                            localStorage.setItem('mytoken', res.data.token)
+                            this.$router.push({name: 'Home'})
                         } else {
-                            this.$message({
-                                type:'error',
-                                message:res.meta.msg
+                            // 如果失败，展示提示信息
+                            this.$message({ 
+                                type: 'error',
+                                message: res.meta.msg
                             })
                         }
                     })
                 } else {
-                    console.log('gg')
+                console.log('校验不通过')
                 }
             })
         }

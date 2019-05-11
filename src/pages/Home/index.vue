@@ -4,16 +4,14 @@
     </div>
 </template>
 <script>
-
+import {getUserList} from '@/api'
 export default {
-    data () {
-        return {
-
-        }
-    },
-    methods: {
-      
-    }
+    mounted () {
+        let params = {params: {query:'',pagenum: 1, pagesize: 1}}
+        getUserList(params).then(res => {
+            console.log(res)
+        })
+    } 
 }
 </script>
 <style lang="scss" scoped>
